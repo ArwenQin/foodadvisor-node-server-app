@@ -4,6 +4,7 @@ import cors from 'cors'
 
 import UserController from "./users/users-controller.js"
 import TuitsController from "./tuits/tuits-controller.js";
+import exploresController from './explores/explores-controller.js';
 import "dotenv/config";
 
 import session from "express-session";
@@ -48,6 +49,7 @@ app.use(session(sessionOptions));
 TuitsController(app);
 AuthController(app);
 UserController(app);
+exploresController(app);
 
 const port = process.env.PORT || 4000;
 app.listen(process.env.PORT || 4000);

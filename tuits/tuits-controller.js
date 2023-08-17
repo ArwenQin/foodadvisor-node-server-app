@@ -1,13 +1,34 @@
 import * as tuitsDao from './tuits-dao.js'
 
 const rateRestaurant = async (req, res) => {
-  const restaurantRating = req.body;
-  restaurantRating.likes = 0;
-  restaurantRating.liked = false;
-  const insertedRating = await tuitsDao.createTuit(restaurantRating);
+  try {
+      const { userId, restaurantId, ...restOfData } = req.body;
+      const existingRating = await tuitsDao.findRatingByUserAndRestaurant(userId, restaurantId);
 
-  res.json(insertedRating);
-}
+      let response;
+      if (existingRating) {
+          // Update existing rating
+          const updatedRating = await tuitsDao.updateTuit(existingRating._id, restOfData);
+          response = { updated: true, data: updatedRating };
+      } else {
+          // Create new rating
+          const newRating = {
+              userId,
+              restaurantId,
+              ...restOfData,
+              likes: 0,
+              liked: false
+          };
+          const insertedRating = await tuitsDao.createTuit(newRating);
+          response = { created: true, data: insertedRating };
+      }
+
+      res.json(response);
+  } catch (error) {
+      console.error('Error during rating:', error);
+      res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
 const createTuit = async (req, res) => {
   const newTuit = req.body;
   newTuit.likes = 0;
@@ -61,7 +82,16 @@ const deleteTuit = async (req, res) => {
 
 
 }
-
+const fetchUserRatings = async (req, res) => {
+  try {
+      const userId = req.params.userId;
+      const ratings = await tuitsDao.findUserRatings(userId);
+      res.json(ratings);
+  } catch (error) {
+      console.error('Error fetching user ratings:', error);
+      res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
 export default (app) => {
   app.get('/api/tuits', findTuits);
   app.post('/api/tuits', createTuit);
@@ -69,5 +99,7 @@ export default (app) => {
   app.delete('/api/tuits/:tid', deleteTuit);
   app.post('/api/rateRestaurant', rateRestaurant);
   app.get('/api/tuits/search', searchTuits);
+  app.get('/api/ratings/user/:userId', fetchUserRatings);
+
 }
 
