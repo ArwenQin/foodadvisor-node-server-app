@@ -9,7 +9,7 @@ import "dotenv/config";
 
 import session from "express-session";
 import AuthController from "./users/auth-controller.js";
-
+import restaurantController from './restaurant/restaurant-controller.js'
 import mongoose from "mongoose";
 const CONNECTION_STRING = process.env.DB_CONNECTION_STRING
 mongoose.connect(CONNECTION_STRING);
@@ -50,6 +50,7 @@ TuitsController(app);
 AuthController(app);
 UserController(app);
 exploresController(app);
+restaurantController(app);
 
 const port = process.env.PORT || 4000;
 app.listen(process.env.PORT || 4000);
