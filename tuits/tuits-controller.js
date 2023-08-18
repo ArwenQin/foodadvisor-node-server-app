@@ -1,23 +1,23 @@
 import * as tuitsDao from './tuits-dao.js'
+import * as usersDao from '../users/users-dao.js';
 
 const rateRestaurant = async (req, res) => {
   try {
-      const { userId, restaurantId, ...restOfData } = req.body;
+      const { userId, restaurantId,username, ...restOfData } = req.body;
       const existingRating = await tuitsDao.findRatingByUserAndRestaurant(userId, restaurantId);
-
+      
       let response;
       if (existingRating) {
-          // Update existing rating
           const updatedRating = await tuitsDao.updateTuit(existingRating._id, restOfData);
           response = { updated: true, data: updatedRating };
       } else {
-          // Create new rating
           const newRating = {
               userId,
               restaurantId,
+              username,
               ...restOfData,
               likes: 0,
-              liked: false
+              liked: false,
           };
           const insertedRating = await tuitsDao.createTuit(newRating);
           response = { created: true, data: insertedRating };
@@ -29,6 +29,7 @@ const rateRestaurant = async (req, res) => {
       res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+
 const createTuit = async (req, res) => {
   const newTuit = req.body;
   newTuit.likes = 0;
@@ -43,13 +44,11 @@ const createTuit = async (req, res) => {
     newTuit.image = 'https://images.seattletimes.com/wp-content/uploads/2019/07/nasameatball.jpg';
   }
   newTuit.time = '1h';
-  if (!newTuit.rating) {
-    newTuit.rating = 1;
-  }
-  newTuit.dislikes = 0;
   const insertedTuit = await tuitsDao.createTuit(newTuit);
   res.json(insertedTuit);
 }
+
+
 const findTuits = async (req, res) => {
   const tuits = await tuitsDao.findTuits()
   res.json(tuits);

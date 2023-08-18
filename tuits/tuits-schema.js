@@ -13,12 +13,12 @@ const schema = mongoose.Schema({
     handle: String,
     topic: String,
     image: String,
-    username: String,
     rating: { type: Number, min: 1, max: 5 },
     comment: String,
     restaurantType: String,
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
     restaurantId: { type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant' },
+    username:String
 }, { collection: 'tuits' });
 
 schema.index({ userId: 1, restaurantId: 1 }, { unique: true });
