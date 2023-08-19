@@ -66,7 +66,11 @@ const AuthController = (app) => {
     }
   };
 
-
+  const findUserById = async (req, res) => {
+    const id = req.params.id;
+    const user = await usersDao.findUserById(id);
+    res.json(user);
+  };
 
 
 
@@ -75,5 +79,6 @@ const AuthController = (app) => {
   app.post("/api/users/profile", profile);
   app.post("/api/users/logout", logout);
   app.put("/api/users/update", update);
+  app.get('/api/users/:id', findUserById);
 };
 export default AuthController;
