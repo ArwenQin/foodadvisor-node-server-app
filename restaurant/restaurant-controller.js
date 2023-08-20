@@ -2,12 +2,28 @@ import * as restaurantsDao from './restaurant-dao.js'
 
 
 const createRestaurant = async (req, res) => {
-  const newRes = req.body;
-  const insertedRes = await restaurantsDao.createRestaurant(newRes);
+
+    const  name  = req.body.name;
+    const existingRes = await restaurantsDao.findResByExactName(name);
+
+    let response;
+    if (existingRes) {
+      if(existingRes.owner !== req.body.owner){
+        res.sendStatus(403);
+        return;
+      }
+      else{
+      const updatedRes = await restaurantsDao.updateRestaurant(existingRes._id, req.body);
+      response = { updated: true, data: updatedRes };
+      res.json(response);
+    }} else {
+
+      const newRes = req.body;
+      const insertedRes = await restaurantsDao.createRestaurant(newRes);
 
   res.json(insertedRes);
 
-}
+}}
 const findRestaurants = async (req, res) => {
   const restaurant = await restaurantsDao.findRestaurants()
   res.json(restaurant);

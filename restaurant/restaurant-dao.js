@@ -7,6 +7,8 @@ export const updateRestaurant = (rid, res) => restaurantModel.updateOne({ _id: r
 export const findResByName = (name) =>
    restaurantModel.findOne({ name: new RegExp(name, 'i') });
 
+export const findResByExactName = (name) =>
+    restaurantModel.findOne({ name: name });
 export const searchRestaurants = (searchTerm) =>
    restaurantModel.find({ name: new RegExp(searchTerm, 'i') });
 

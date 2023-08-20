@@ -92,12 +92,12 @@ const fetchUserRatings = async (req, res) => {
   }
 };
 export default (app) => {
-  app.get('/api/tuits', findTuits);
-  app.post('/api/tuits', createTuit);
-  app.put('/api/tuits/:tid', updateTuit);
-  app.delete('/api/tuits/:tid', deleteTuit);
+  app.get('/api/rates', findTuits);
+  app.post('/api/rates', createTuit);
+  app.put('/api/rates/:tid', updateTuit);
+  app.delete('/api/rates/:tid', deleteTuit);
   app.post('/api/rateRestaurant', rateRestaurant);
-  app.get('/api/tuits/search', searchTuits);
+  app.get('/api/rates/search', searchTuits);
   app.get('/api/ratings/user/:userId', fetchUserRatings);
 
 }
