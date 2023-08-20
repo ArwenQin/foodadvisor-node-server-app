@@ -3,19 +3,21 @@ import mongoose from 'mongoose';
 const restaurantSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: [true, 'A restaurant must have a name'],
-        unique: true,
+
         trim: true,
+default:"Hi Panda",
         maxlength: [40, 'A restaurant name must have fewer or equal to 40 characters'],
         minlength: [1, 'A restaurant name must have more or equal to 1 characters']
     },
     address: {
         type: String,
-        required: [true, 'A restaurant must have an address']
+        default:"Pandalia",
+
     },
     cuisine: {
         type: String,
-        required: [true, 'A restaurant must specify its cuisine type']
+        default:"Bamboo Set",
+
     },
     image: {
         type: String,
@@ -39,7 +41,8 @@ const restaurantSchema = new mongoose.Schema({
     },
     description: {
         type: String,
-        trim: true
+        trim: true,
+        default:"What's for pandas?"
     },
     details: {
         type: String,
