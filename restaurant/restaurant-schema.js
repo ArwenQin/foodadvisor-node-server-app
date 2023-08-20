@@ -1,11 +1,12 @@
 import mongoose from 'mongoose';
 
 const restaurantSchema = new mongoose.Schema({
+    owner: { type: String },
     name: {
         type: String,
-
+        unique: true,
         trim: true,
-default:"Hi Panda",
+        default:"Hi Panda",
         maxlength: [40, 'A restaurant name must have fewer or equal to 40 characters'],
         minlength: [1, 'A restaurant name must have more or equal to 1 characters']
     },
@@ -81,10 +82,16 @@ default:"Hi Panda",
         max: [5, 'Rating must be below 5.0'],
         set: val => Math.round(val * 10) / 10 // round to nearest 0.1
     },
+
+    ratingsSum: {
+        type: Number,
+        default: 4.5
+    },
     ratingsQuantity: {
         type: Number,
-        default: 0
+        default: 1
     }
 });
+
 
 export default restaurantSchema;
